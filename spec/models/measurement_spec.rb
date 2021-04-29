@@ -1,31 +1,31 @@
 require 'rails_helper'
 
 RSpec.describe Measurement, type: :model do
-  it 'creates measurement correctly' do
-    @user = User.create(name: 'John', password: 'John')
-    @measure = Measure.create(item: 'Height', unit: 'cm')
-    @measurement = Measurement.new(amount: 2, user: @user, measure: @measure)
-    expect(@measurement.valid?).to be true
-  end
+  context 'Measurements tests' do
+    let(:user) { create(:user) }
+    let(:measure) { create(:measure) }
+    let(:measurement) { build(:measurement) }
+    it 'creates measurement correctly' do
+      measurement.user = user
+      measurement.measure = measure
+      expect(measurement.valid?).to be true
+    end
 
-  it 'checks if measurement can be created without amount' do
-    @user = User.create(name: 'John', password: 'John')
-    @measure = Measure.create(item: 'Height', unit: 'cm')
-    @measurement = Measurement.new(user: @user, measure: @measure)
-    expect(@measurement.valid?).to be false
-  end
+    it 'checks if measurement can be created without amount' do
+      measurement.user = user
+      measurement.measure = measure
+      measurement.amount = nil
+      expect(measurement.valid?).to be false
+    end
 
-  it 'checks if measurement can be created without user' do
-    @user = User.create(name: 'John', password: 'John')
-    @measure = Measure.create(item: 'Height', unit: 'cm')
-    @measurement = Measurement.new(amount: 2, measure: @measure)
-    expect(@measurement.valid?).to be false
-  end
+    it 'checks if measurement can be created without user' do
+      measurement.measure = measure
+      expect(measurement.valid?).to be false
+    end
 
-  it 'checks if measurement can be created without measure' do
-    @user = User.create(name: 'John', password: 'John')
-    @measure = Measure.create(item: 'Height', unit: 'cm')
-    @measurement = Measurement.new(amount: 2, user: @user)
-    expect(@measurement.valid?).to be false
+    it 'checks if measurement can be created without measure' do
+      measurement.user = user
+      expect(measurement.valid?).to be false
+    end
   end
 end
