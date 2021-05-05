@@ -5,8 +5,7 @@ class UsersController < ApplicationController
 
   def create
     new_user = users_params
-    new_user['password'] = Digest::SHA2.new(512).hexdigest(new_user['password'])
-    @user = User.new(new_user)
+    @user = User.new(name: new_user[:name], password: new_user[:password])
     if @user.save
       render json: { token: encode_token }, status: :ok
     else
@@ -20,6 +19,6 @@ class UsersController < ApplicationController
   end
 
   def users_params
-    params.require(:user).permit(:name, :password)
+    params.permit(:name, :password)
   end
 end
