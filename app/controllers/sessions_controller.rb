@@ -1,16 +1,14 @@
-require 'json'
 require 'digest'
-require 'jwt'
 
 class SessionsController < ApplicationController
+  include JWTHelper
+
   def create
     login_user = sessions_params
     login_user['password'] = Digest::SHA2.new(512).hexdigest(login_user['password'])
-    @user = User.where(login_user)
-    if @user && @user[0]
-      payload = { 'id' => @user[0][:id], 'created_at' => @user[0][:created_at] }
-      token = JWT.encode(payload.to_json, secret_key, 'none')
-      render json: { token: token, name: @user[0]['name'] }, status: :ok
+    @user = User.where(login_user)[0]
+    if @user
+      render json: { token: encode_token, name: @user['name'] }, status: :ok
     else
       render json: { error: 'Username or password is incorrect!' }, status: :unauthorized
     end
@@ -18,11 +16,5 @@ class SessionsController < ApplicationController
 
   def sessions_params
     params.require(:session).permit(:name, :password)
-  end
-
-  private
-
-  def secret_key
-    'b@by!'
   end
 end
