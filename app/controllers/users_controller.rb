@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def create
     new_user = users_params
-    @user = User.new(name: new_user[:name], password: new_user[:password])
+    @user = User.create(name: new_user[:name], password: new_user[:password])
     if @user.save
       render json: { token: encode_token }, status: :ok
     else
