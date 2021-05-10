@@ -8,7 +8,7 @@ class MeasurementsController < ApplicationController
     if @measurement.save
       render json: { measurement: @measurement }, status: :ok
     else
-      render json: { error: 'Measurement not created!' }, status: :internal_server_error
+      render json: { error: 'Measurement not created!' }, status: :unprocessable_entity
     end
   end
 
@@ -17,7 +17,7 @@ class MeasurementsController < ApplicationController
     if @user
       render json: { measurements: @user.measurements, measures: @measures }, status: :ok
     else
-      render json: { error: 'Measurements not fetched!' }, status: :internal_server_error
+      render json: { error: 'Measurements not fetched!' }, status: :not_found
     end
   end
 

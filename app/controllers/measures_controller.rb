@@ -8,7 +8,7 @@ class MeasuresController < ApplicationController
     if @user.name == 'Admin' && @measure.save
       render json: { id: @measure['id'] }, status: :ok
     else
-      render json: { error: 'Measurement not created' }, status: :internal_server_error
+      render json: { error: 'Measurement not created' }, status: :unprocessable_entity
     end
   end
 
